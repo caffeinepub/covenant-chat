@@ -1,0 +1,158 @@
+{
+  "kind": "build_request",
+  "title": "Covenant Chat: Shared-Password Private Two-Person Chat (No Accounts, Polling Updates)",
+  "projectName": "Covenant Chat",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Make the app open directly to the chat experience with no login, signup, or authentication screens; the only gate allowed is a shared-password unlock step.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "recent-1"
+        ],
+        "quotes": [
+          "Create a private chat application with NO login, NO signup, and NO authentication screens.",
+          "Two‑user chat with a simple shared password"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Launching the app lands on the chat feature (no account creation, email, phone, or username UI).",
+        "No Internet Identity flow is required for normal use.",
+        "The only pre-chat interaction is entering a shared password (no user accounts are created)."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Implement shared-password access control: require the user to enter the shared password to view/send messages, and block read/write actions when the password is missing or incorrect.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "recent-1"
+        ],
+        "quotes": [
+          "Two‑user chat with a simple shared password\n   • No accounts, no signup\n   • Both devices enter the same password to unlock the chat"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Frontend prompts for shared password if none is present for the session/device.",
+        "Backend rejects message reads and writes when the supplied password is incorrect.",
+        "Incorrect password results in a clear English error message and no message content is returned.",
+        "Password is not displayed in plain text while typing (masked input)."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Store chat messages in the Internet Computer canister and expose backend APIs to: add a message, list messages (optionally since a given message id/timestamp), and clear/reset chat history (admin via shared password).",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "recent-1"
+        ],
+        "quotes": [
+          "Messages stored in a canister",
+          "Messages stored securely in Firebase or secure database",
+          "Two‑user chat with a simple shared password"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Messages persist across page refreshes.",
+        "Backend provides a method to append a message with server-recorded timestamp.",
+        "Backend provides a method to fetch messages in chronological order.",
+        "Backend provides a password-protected method to clear all messages."
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Implement periodic refresh (polling) for new messages (not real-time): the chat view should fetch new messages on an interval and update the thread without requiring a manual refresh.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "recent-1"
+        ],
+        "quotes": [
+          "Still not real‑time but works reliably",
+          "Not real‑time, but updates every few seconds"
+        ]
+      },
+      "acceptanceCriteria": [
+        "When one device sends a message, the other device sees it appear automatically within the polling interval.",
+        "Polling can be paused/stopped when the user is locked out (no valid password) to avoid leaking metadata.",
+        "There is no WebSocket / real-time subscription requirement; updates rely on polling via React Query refetch interval."
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Build the two-person chat UI: sender messages aligned right labeled \"You\", receiver messages aligned left labeled \"Partner\", and show a timestamp for each message.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "recent-1"
+        ],
+        "quotes": [
+          "Sender messages on right, receiver messages on left",
+          "Show \"You\" and \"Partner\" labels instead of usernames",
+          "Show timestamp for each message"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Messages sent from the current device render on the right with label \"You\".",
+        "Messages not sent from the current device render on the left with label \"Partner\".",
+        "Each message bubble shows a human-readable timestamp (English).",
+        "The input supports sending via a Send button and Enter key (Shift+Enter for newline is acceptable)."
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Add dark mode support and ensure the chat UI is clean, readable, and consistent across light/dark themes.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "recent-1"
+        ],
+        "quotes": [
+          "Simple UI: - Clean chat interface",
+          "Dark mode support"
+        ]
+      },
+      "acceptanceCriteria": [
+        "UI provides a dark mode style (system preference or in-app toggle).",
+        "Text, bubbles, and background meet basic contrast/readability in dark mode.",
+        "No visual regressions between light and dark themes for message alignment and labels."
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "text": "Apply a coherent visual theme (colors, typography, spacing, and components) appropriate for a private chat app, and enforce it consistently across the unlock and chat screens (avoid blue/purple-dominant palettes).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "recent-1"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Unlock UI and chat UI share the same design system (spacing, typography, button styles).",
+        "Theme uses a distinct palette that is not primarily blue/purple.",
+        "Overall layout feels purpose-built for messaging (thread area + composer) and remains uncluttered."
+      ]
+    }
+  ],
+  "constraints": [
+    "Use only the Internet Computer backend (Motoko single-actor) for persistence; no Firebase or external databases/services.",
+    "Do not add account creation, signup, or user profile concepts.",
+    "Do not edit files in frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, or anything under frontend/src/components/ui; compose these as-is.",
+    "User-facing text must be in English."
+  ],
+  "nonGoals": [
+    "True real-time messaging (WebSockets/subscriptions) is out of scope; use polling.",
+    "Device-ID-based allowlisting for exactly two specific devices is out of scope for this build.",
+    "Native mobile app packaging (Android/iOS) is out of scope; deliver as a web app.",
+    "End-to-end encryption and external key management are out of scope.",
+    "Optional PIN app-lock beyond the shared-password gate is not included unless requested later."
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}

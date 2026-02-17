@@ -1,0 +1,20 @@
+{
+  "backend/main.mo": "Motoko canister storing messages with timestamped IDs, enforcing a shared password for reading, writing, and clearing.",
+  "feature_evidence.json": "Feature evidence mapping features to involved frontend files, components, and related test IDs.",
+  "frontend-file-summaries.txt": "Prewritten summaries describing the roles of key frontend chat-related files.",
+  "frontend/index.css": "Tailwind base/theme variables defining a warm color palette for light and dark modes.",
+  "frontend/index.html": "HTML entry point mounting the React app at root and loading main.tsx.",
+  "frontend/src/App.tsx": "Root component toggling between unlock and chat screens based on stored session password, wrapped in theme provider.",
+  "frontend/src/features/chat/ChatScreen.tsx": "Chat UI showing messages, composer, polling updates, theme toggle, lock control, and clear-chat dialog.",
+  "frontend/src/features/chat/chatSession.ts": "Session storage helpers for saving, retrieving, and clearing the shared password.",
+  "frontend/src/features/chat/deviceIdentity.ts": "Generates and persists a unique device ID in localStorage for message ownership checks.",
+  "frontend/src/features/chat/messageCodec.ts": "Encodes messages with device ID and parses them to distinguish own vs partner messages.",
+  "frontend/src/features/chat/UnlockScreen.tsx": "Unlock screen prompting for shared password, verifying it, and storing it in session.",
+  "frontend/src/features/chat/useChat.ts": "React Query hooks for polling messages, sending messages, clearing chat, and verifying passwords via the canister.",
+  "frontend/src/hooks/useActor.ts": "Creates and caches an authenticated or anonymous backend actor and invalidates dependent queries when the identity changes.",
+  "frontend/src/hooks/useInternetIdentity.ts": "Provides Internet Identity context for login, identity loading, and state management using AuthClient.",
+  "frontend/src/index.css": "Defines Tailwind base layers and theme variables for light and dark modes with custom color tokens.",
+  "frontend/src/main.tsx": "Bootstraps the app with React, wrapping it in React Query and Internet Identity providers.",
+  "frontend/tailwind.config.js": "Configures Tailwind with custom colors, animations, plugins, and OKLCH-based theme extensions.",
+  "project_state.json": "Describes project state, requirements, and planned features for a password-gated two‑user chat app."
+}

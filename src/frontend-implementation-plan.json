@@ -1,0 +1,185 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Covenant Chat — Shared-password two-person chat (frontend)",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Launch directly into the chat experience with only a shared-password unlock gate (no login/signup/auth screens).",
+      "acceptanceCriteria": [
+        "Launching the app lands on the chat feature (no account creation, email, phone, or username UI).",
+        "No Internet Identity flow is required for normal use.",
+        "The only pre-chat interaction is entering a shared password (no user accounts are created)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "create",
+          "description": "Create the app shell that renders either the shared-password Unlock screen or the Chat screen (no login/signup routes). Ensure the unlock step is the only gate before chat content is shown."
+        },
+        {
+          "path": "frontend/src/features/chat/UnlockScreen.tsx",
+          "operation": "create",
+          "description": "Implement the shared-password unlock UI as the initial interaction before showing chat. Use shadcn-ui components (e.g., Card, Button, Input) for consistent layout; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/features/chat/ChatScreen.tsx",
+          "operation": "create",
+          "description": "Implement the main chat screen and ensure it is the default post-unlock view (no unrelated landing page). Use shadcn-ui components for composer/actions; verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Require a shared password to read/send/clear messages; block chat actions when missing/incorrect and show clear English errors.",
+      "acceptanceCriteria": [
+        "Frontend prompts for shared password if none is present for the session/device.",
+        "Backend rejects message reads and writes when the supplied password is incorrect.",
+        "Incorrect password results in a clear English error message and no message content is returned.",
+        "Password is not displayed in plain text while typing (masked input)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/features/chat/chatSession.ts",
+          "operation": "create",
+          "description": "Add session utilities to store/retrieve the shared password for the current browser session/device and to clear it on lockout or user action (e.g., sessionStorage)."
+        },
+        {
+          "path": "frontend/src/features/chat/UnlockScreen.tsx",
+          "operation": "modify",
+          "description": "Use a masked password input (type='password'), handle submit, and surface incorrect-password errors in clear English without rendering any messages. Use shadcn-ui Input/Button/Alert-like patterns as available; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/features/chat/useChat.ts",
+          "operation": "create",
+          "description": "Create a chat data hook that uses the existing actor (via useActor) and requires the current password to fetch/send/clear. When password is missing/invalid, ensure read/write queries and mutations are disabled/blocked and return a clear English error state."
+        },
+        {
+          "path": "frontend/src/features/chat/ChatScreen.tsx",
+          "operation": "modify",
+          "description": "Wire the chat UI to the shared-password state: block sending/clearing when locked, provide a \"Lock\" action that forgets the password for the session/device, and show clear English error messaging when backend calls fail due to password. Use shadcn-ui Button/Dialog as appropriate; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Gate rendering so that chat content and background polling never run while locked (no password present/valid), and route the user back to Unlock on lockout."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Poll for new messages on an interval using React Query refetching; pause polling while locked out.",
+      "acceptanceCriteria": [
+        "When one device sends a message, the other device sees it appear automatically within the polling interval.",
+        "Polling can be paused/stopped when the user is locked out (no valid password) to avoid leaking metadata.",
+        "There is no WebSocket / real-time subscription requirement; updates rely on polling via React Query refetch interval."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/features/chat/useChat.ts",
+          "operation": "modify",
+          "description": "Implement message fetching with React Query using a refetch interval to poll for new messages. Ensure polling is enabled only when a valid shared password is present and the user is unlocked; disable polling immediately on lockout or incorrect password errors."
+        },
+        {
+          "path": "frontend/src/features/chat/ChatScreen.tsx",
+          "operation": "modify",
+          "description": "Consume the polling query results to update the thread automatically without manual refresh, and ensure the UI reflects loading/error states without leaking message content while locked."
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "Build a two-person chat UI with right-aligned \"You\" messages, left-aligned \"Partner\" messages, and human-readable timestamps; support Send and Enter-to-send.",
+      "acceptanceCriteria": [
+        "Messages sent from the current device render on the right with label \"You\".",
+        "Messages not sent from the current device render on the left with label \"Partner\".",
+        "Each message bubble shows a human-readable timestamp (English).",
+        "The input supports sending via a Send button and Enter key (Shift+Enter for newline is acceptable)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/features/chat/deviceIdentity.ts",
+          "operation": "create",
+          "description": "Create a lightweight per-device identifier stored locally (e.g., localStorage) so the UI can distinguish \"You\" vs \"Partner\" without accounts."
+        },
+        {
+          "path": "frontend/src/features/chat/messageCodec.ts",
+          "operation": "create",
+          "description": "Implement a frontend-only message encoding/decoding convention that embeds the sender device identifier with the message text (without showing markers in the UI), allowing correct left/right alignment and labeling."
+        },
+        {
+          "path": "frontend/src/features/chat/ChatScreen.tsx",
+          "operation": "modify",
+          "description": "Render a messaging layout (thread + composer): right-aligned bubbles labeled \"You\" for messages from this device, left-aligned bubbles labeled \"Partner\" otherwise, and show an English, human-readable timestamp per message. Support Send button and Enter-to-send with Shift+Enter for newline. Use shadcn-ui components (e.g., ScrollArea, Button, Textarea/Input) as available; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/features/chat/useChat.ts",
+          "operation": "modify",
+          "description": "Encode outgoing messages using the message codec before sending, and decode fetched messages for rendering (fall back gracefully for legacy/unparseable content)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "summary": "Add dark mode support with a clean, readable chat UI across light/dark themes.",
+      "acceptanceCriteria": [
+        "UI provides a dark mode style (system preference or in-app toggle).",
+        "Text, bubbles, and background meet basic contrast/readability in dark mode.",
+        "No visual regressions between light and dark themes for message alignment and labels."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/features/theme/useTheme.ts",
+          "operation": "create",
+          "description": "Add a small theme controller hook to support dark mode (system preference and/or an in-app toggle) by toggling the Tailwind 'dark' class at the document root and persisting preference locally."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire theme initialization and provide a simple in-app dark mode toggle accessible from the chat experience (e.g., header action). Use shadcn-ui Button/Switch if available; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/index.css",
+          "operation": "create",
+          "description": "Define light/dark CSS variables used by the existing Tailwind/shadcn token system to ensure readable background/foreground/border colors in both themes, including chat bubble surfaces."
+        },
+        {
+          "path": "frontend/src/features/chat/ChatScreen.tsx",
+          "operation": "modify",
+          "description": "Apply theme-aware classes/tokens for message bubbles, labels, and background to maintain contrast and readability in both light and dark modes."
+        }
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "summary": "Apply a cohesive private-chat visual theme (not blue/purple-dominant) consistently across unlock and chat screens.",
+      "acceptanceCriteria": [
+        "Unlock UI and chat UI share the same design system (spacing, typography, button styles).",
+        "Theme uses a distinct palette that is not primarily blue/purple.",
+        "Overall layout feels purpose-built for messaging (thread area + composer) and remains uncluttered."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Set a coherent, non-blue/purple-dominant color palette via the app's CSS variables (shadcn/tailwind tokens), along with consistent typography and spacing defaults used across screens."
+        },
+        {
+          "path": "frontend/src/features/chat/UnlockScreen.tsx",
+          "operation": "modify",
+          "description": "Apply the shared design system (typography, spacing, component styles) to the unlock screen so it visually matches the chat screen. Use shadcn-ui components for consistency; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/features/chat/ChatScreen.tsx",
+          "operation": "modify",
+          "description": "Ensure the chat layout is uncluttered and messaging-focused (thread area + composer) and uses the same theme tokens/components as Unlock. Use shadcn-ui components where appropriate; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Add a minimal, consistent layout wrapper (padding/max width where appropriate) shared by unlock and chat to enforce the theme and spacing system across the app."
+        }
+      ]
+    }
+  ]
+}

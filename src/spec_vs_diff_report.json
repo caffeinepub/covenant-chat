@@ -1,0 +1,46 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-17T03:26:47.150Z",
+  "summary": "Most core requirements appear implemented: shared-password gate, backend password-protected read/write/clear APIs, polling via React Query, and dark-mode/theming support. However, the diff summary is truncated for ChatScreen, so some REQ-5 UI acceptance criteria (\"You\"/\"Partner\" labeling and left/right alignment) cannot be verified from provided evidence. The backend also includes a password-change API that was not requested.",
+  "missing_requirements": [
+    {
+      "id": "REQ-5",
+      "requirement": "Sender messages aligned right labeled \"You\", receiver messages aligned left labeled \"Partner\", and show a timestamp for each message.",
+      "reason": "Chat UI implementation details are truncated; the visible portion of ChatScreen shows timestamp formatting logic but does not provide evidence of message bubble alignment or the exact \"You\"/\"Partner\" labels being rendered.",
+      "evidence": [
+        "frontend/src/features/chat/ChatScreen.tsx (truncated)"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "Backend API to change the shared password (setPassword).",
+      "reason": "The BuildRequest does not ask for password rotation/change functionality; only shared-password gating plus a password-protected clear/reset.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    }
+  ],
+  "confidence": 0.72,
+  "changed_files": [
+    "all_files_summary.json",
+    "backend/main.mo",
+    "frontend-file-summaries.txt",
+    "frontend/index.css",
+    "frontend/index.html",
+    "frontend/src/App.tsx",
+    "frontend/src/features/chat/ChatScreen.tsx",
+    "frontend/src/features/chat/UnlockScreen.tsx",
+    "frontend/src/features/chat/chatSession.ts",
+    "frontend/src/features/chat/deviceIdentity.ts",
+    "frontend/src/features/chat/messageCodec.ts",
+    "frontend/src/features/chat/useChat.ts",
+    "frontend/src/hooks/useActor.ts",
+    "frontend/src/hooks/useInternetIdentity.ts",
+    "frontend/src/index.css",
+    "frontend/src/main.tsx",
+    "frontend/tailwind.config.js",
+    "project_state.json"
+  ]
+}

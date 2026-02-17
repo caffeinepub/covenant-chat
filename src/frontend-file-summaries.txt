@@ -1,0 +1,11 @@
+{
+  "frontend/src/index.css": "Global styles with warm amber/orange OKLCH color palette for light and dark modes, avoiding blue/purple dominance.",
+  "frontend/tailwind.config.js": "Tailwind configuration with extended color tokens matching the warm design system.",
+  "frontend/src/App.tsx": "Main app component managing unlock/lock state and rendering UnlockScreen or ChatScreen based on session password.",
+  "frontend/src/features/chat/chatSession.ts": "Session storage utilities for managing the shared password in sessionStorage.",
+  "frontend/src/features/chat/deviceIdentity.ts": "Device identification utilities generating and storing a unique device ID in localStorage.",
+  "frontend/src/features/chat/messageCodec.ts": "Message encoding/decoding utilities that embed device ID with message text for \"You\" vs \"Partner\" labeling.",
+  "frontend/src/features/chat/useChat.ts": "React Query hooks for fetching messages with polling, sending messages, clearing chat, and verifying password.",
+  "frontend/src/features/chat/UnlockScreen.tsx": "Password unlock screen with card layout, password input, and error handling for incorrect passwords.",
+  "frontend/src/features/chat/ChatScreen.tsx": "Main chat interface with message thread, composer, theme toggle, lock button, and clear chat functionality."
+}

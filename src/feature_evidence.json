@@ -1,0 +1,128 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-make-the-app-open-directly-to-the-chat-experience-with-no-login-signup-or-authentication-screens-the-only-gate-allowed-is-a-shared-password-unlock-step",
+      "featureTitle": "Make the app open directly to the chat experience with no login, signup, or authentication screens; the only gate allowed is a shared-password unlock step.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/features/chat/ChatScreen.tsx",
+        "frontend/src/features/chat/UnlockScreen.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-shared-password-access-control-require-the-user-to-enter-the-shared-password-to-view-send-messages-and-block-read-write-actions-when-the-password-is-missing-or-incorrect",
+      "featureTitle": "Implement shared-password access control: require the user to enter the shared password to view/send messages, and block read/write actions when the password is missing or incorrect.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/features/chat/ChatScreen.tsx",
+        "frontend/src/features/chat/UnlockScreen.tsx",
+        "frontend/src/features/chat/chatSession.ts",
+        "frontend/src/features/chat/useChat.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-periodic-refresh-polling-for-new-messages-not-real-time-the-chat-view-should-fetch-new-messages-on-an-interval-and-update-the-thread-without-requiring-a-manual-refresh",
+      "featureTitle": "Implement periodic refresh (polling) for new messages (not real-time): the chat view should fetch new messages on an interval and update the thread without requiring a manual refresh.",
+      "files": [
+        "frontend/src/features/chat/ChatScreen.tsx",
+        "frontend/src/features/chat/useChat.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-the-two-person-chat-ui-sender-messages-aligned-right-labeled-you-receiver-messages-aligned-left-labeled-partner-and-show-a-timestamp-for-each-message",
+      "featureTitle": "Build the two-person chat UI: sender messages aligned right labeled \"You\", receiver messages aligned left labeled \"Partner\", and show a timestamp for each message.",
+      "files": [
+        "frontend/src/features/chat/ChatScreen.tsx",
+        "frontend/src/features/chat/deviceIdentity.ts",
+        "frontend/src/features/chat/messageCodec.ts",
+        "frontend/src/features/chat/useChat.ts"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-5"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-dark-mode-support-and-ensure-the-chat-ui-is-clean-readable-and-consistent-across-light-dark-themes",
+      "featureTitle": "Add dark mode support and ensure the chat UI is clean, readable, and consistent across light/dark themes.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/features/chat/ChatScreen.tsx",
+        "frontend/src/index.css"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-6"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-apply-a-coherent-visual-theme-colors-typography-spacing-and-components-appropriate-for-a-private-chat-app-and-enforce-it-consistently-across-the-unlock-and-chat-screens-avoid-blue-purple-dominant-palettes",
+      "featureTitle": "Apply a coherent visual theme (colors, typography, spacing, and components) appropriate for a private chat app, and enforce it consistently across the unlock and chat screens (avoid blue/purple-dominant palettes).",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/features/chat/ChatScreen.tsx",
+        "frontend/src/features/chat/UnlockScreen.tsx",
+        "frontend/src/index.css"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-7"
+      ],
+      "confidence": "high"
+    }
+  ]
+}
